@@ -1,0 +1,276 @@
+<?php
+
+
+use App\Http\Controllers\Bom\BillOfMaterialController;
+use App\Http\Controllers\Bom\BomVersionItemController;
+use App\Http\Controllers\HR\LeaveManagement\LeaveNotesController;
+use App\Http\Controllers\HrMaster\CategoryMasterController;
+use App\Http\Controllers\HrMaster\DivisionMasterController;
+use App\Http\Controllers\HrMaster\GroupMasterController;
+use App\Http\Controllers\HrMaster\HrDepartmentMasterController;
+use App\Http\Controllers\HrMaster\GradeMasterController;
+use App\Http\Controllers\HrMaster\HrBranchMasterController;
+use App\Http\Controllers\HrMaster\HrDesignationMasterController;
+use App\Http\Controllers\HrMaster\UnitMasterController;
+use App\Http\Controllers\Inventory\GateInwardReceiptController;
+use App\Http\Controllers\Inventory\GoodsReceiptNoteController;
+use App\Http\Controllers\Inventory\GoodsReceiptNoteItemController;
+use App\Http\Controllers\Inventory\TransactionController;
+use App\Http\Controllers\JobWork\IssueJobWorkChallanItemsController;
+use App\Http\Controllers\JobWork\JobWorkOrderItemsController;
+use App\Http\Controllers\JobWork\JobWorkRateMasterController;
+use App\Http\Controllers\JobWork\JobWorkRateMasterProcessController;
+use App\Http\Controllers\JobWork\JobWorkRateTermsConditionController;
+use App\Http\Controllers\JobWork\JobWorkReWorkChallanController;
+use App\Http\Controllers\JobWork\JobWorkReWorkChallanItemController;
+use App\Http\Controllers\JobWork\JobWorkReWorkReceiptController;
+use App\Http\Controllers\JobWork\RawMaterialController;
+use App\Http\Controllers\JobWork\RawMaterialSubContractorItemsController;
+use App\Http\Controllers\JobWork\ReceiptJobWorkChallanController;
+use App\Http\Controllers\JobWork\ReturnRejectionBillingTermController;
+use App\Http\Controllers\JobWork\ReturnRejectionMemoController;
+use App\Http\Controllers\JobWork\ReturnRejectionMemoItemsController;
+use App\Http\Controllers\JobWork\ScrapReceiptEntryController;
+use App\Http\Controllers\JobWork\SubContractorRateParameterController;
+use App\Http\Controllers\Master\BankController;
+use App\Http\Controllers\Master\BranchMasterController;
+use App\Http\Controllers\Master\CityMasterController;
+use App\Http\Controllers\Master\CountryMasterController;
+use App\Http\Controllers\Master\CurrencyController;
+use App\Http\Controllers\Master\DefaultTermsConditionItemController;
+use App\Http\Controllers\Master\DepartmentController;
+use App\Http\Controllers\Master\DesignationController;
+use App\Http\Controllers\Master\DocumentFooterController;
+use App\Http\Controllers\Master\DocumentHeaderController;
+use App\Http\Controllers\Master\DocumentTypeController;
+use App\Http\Controllers\Master\EnquiryReferenceController;
+use App\Http\Controllers\Master\ExpenseController;
+use App\Http\Controllers\Master\IndustryTypeController;
+use App\Http\Controllers\Master\ItemMasterController;
+use App\Http\Controllers\Master\LeadTitleMasterController;
+use App\Http\Controllers\Master\MachineController;
+use App\Http\Controllers\Master\NoteController;
+use App\Http\Controllers\Master\OperatorController;
+use App\Http\Controllers\Master\PackingController;
+use App\Http\Controllers\Master\PaymentDeductionController;
+use App\Http\Controllers\Master\ProcessController;
+use App\Http\Controllers\Master\PurchaseTypeController;
+use App\Http\Controllers\Master\QuotationTypeController;
+use App\Http\Controllers\Master\StateMasterController;
+use App\Http\Controllers\Master\StoreMasterController;
+use App\Http\Controllers\Master\DefaultTermsConditionController;
+use App\Http\Controllers\Master\TermsConditionGroupController;
+use App\Http\Controllers\Master\TermsConditionTemplateItemMasterController;
+use App\Http\Controllers\Mrp\IndentApprovalController;
+use App\Http\Controllers\Partymaster\PartyMasterController;
+use App\Http\Controllers\Partymaster\TermAndConditionController;
+use App\Http\Controllers\ProductionPlanning\JobCardProcessInSideController;
+use App\Http\Controllers\ProductionPlanning\JobCardProcessOutSideController;
+use App\Http\Controllers\ProductionPlanning\JobCardsController;
+use App\Http\Controllers\ProductionPlanning\ProcessSheetListController;
+use App\Http\Controllers\ProductionPlanning\ShowIssueItemsController;
+use App\Http\Controllers\ProductionPlanning\WorkOrderController;
+use App\Http\Controllers\ProductionPlanning\ProcessSheetMasterController;
+use App\Http\Controllers\Purchase\PurchaseOrderPoHistoryController;
+use App\Http\Controllers\Purchase\PurchaseOrderShowAmdDetailController;
+use App\Http\Controllers\Purchase\PurchaseOrderTermConditionController;
+use App\Http\Controllers\Purchase\PurchaseQuotationTermConditionController;
+use App\Http\Controllers\Purchase\PurchaseQuotationController;
+use App\Http\Controllers\Purchase\PurchaseQuotationItemsController;
+use App\Http\Controllers\Purchase\PurchaseReturnBillingController;
+use App\Http\Controllers\Purchase\PurchaseReturnController;
+use App\Http\Controllers\Purchase\PurchaseOrderController;
+use App\Http\Controllers\Purchase\PurchaseOrderItemController;
+use App\Http\Controllers\Purchase\PurchaseReturnItemController;
+use App\Http\Controllers\Purchase\PurchaseReturnTermConditionController;
+use App\Http\Controllers\QualityControl\FinishedGoodQualityControlController;
+use App\Http\Controllers\QualityControl\InwardQualityControlController;
+use App\Http\Controllers\QualityControl\InwardQualityControlItemController;
+use App\Http\Controllers\QualityControl\JobWorkOutsideQcController;
+use App\Http\Controllers\QualityControl\WorkOrderSubAssemblyQcController;
+use App\Http\Controllers\QualityControl\JobCardProcessInsideQcController;
+use App\Http\Controllers\SalesCrm\SalesEnquiryController;
+use App\Http\Controllers\SalesCrm\SalesOrderItemsController;
+use App\Http\Controllers\ProductionPlanning\WorkOrderItemController;
+use App\Models\HR\LeaveManagement\LeaveNotes;
+use Illuminate\Support\Facades\Route;
+
+Route::group(['middleware' => 'auth:sanctum'], function () {
+
+    Route::apiResource('receipt-job-work-challan',ReceiptJobWorkChallanController::class);
+    Route::apiResource('return-rejection-memo',ReturnRejectionMemoController::class);
+    Route::apiResource('return-rejection-memo-item',ReturnRejectionMemoItemsController::class);
+    Route::get('get-rejection-memo-item/{id}',[ReturnRejectionMemoItemsController::class,'getRejectionMemoItem']);
+    Route::apiResource('return-rejection-billing-term', ReturnRejectionBillingTermController::class);
+    Route::get('get-return-rejection-billing-term/{id}', [ReturnRejectionBillingTermController::class, 'getReturnRejectionBillingTerm']);
+    Route::delete('delete-return-rejection-billing-term/{id}', [ReturnRejectionBillingTermController::class, 'deleteReturnRejectionBillingTerm']);
+
+
+    Route::apiResource('raw-material',RawMaterialController::class);
+    Route::apiResource('raw-material-sub-contractor-item',RawMaterialSubContractorItemsController::class);
+    Route::post('add-raw-material-sub-contractor-item',[RawMaterialSubContractorItemsController::class,'addRawMaterialItem']);
+    Route::get('get-raw-material-contractor-item/{id}',[RawMaterialSubContractorItemsController::class,'getRawMaterialItems']);
+    Route::apiResource('scrap-receipt-entrys',ScrapReceiptEntryController::class);
+    Route::apiResource('job-work-rework-challan',JobWorkReWorkChallanController::class);
+    Route::apiResource('job-work-rework-challan-item',JobWorkReWorkChallanItemController::class);
+    Route::post('get-job-work-item-with-filter', [JobWorkOrderItemsController::class,'getJobWorkItemFilter']);
+    Route::post('add-job-work-rework-challan-item', [JobWorkReWorkChallanItemController::class,'addJobReWorkChallanItem']);
+    Route::get('get-job-work-rework-challan-item/{id}',[JobWorkReWorkChallanItemController::class, 'getJobReWorkChallanItem']);
+    Route::apiResource('job-work-reawork-receipt',JobWorkReWorkReceiptController::class);
+    Route::post('get-job-card-item-filter',[JobCardsController::class, 'getJobCardItemFilter']);
+    Route::post('get-issue-job-challan-item-filter',[IssueJobWorkChallanItemsController::class,'getIssueJobChallanItemFilter']);
+
+    Route::post('get-job-Rework-item-with-filter', [JobWorkReWorkChallanItemController::class,'getJobReWorkItemFilter']);
+    Route::apiResource('job-work-rate-master',JobWorkRateMasterController::class);
+    Route::get('/get-job-work-rate-contractor-by-item/{itemCode}', [JobWorkRateMasterController::class, 'getSubContractorByItemCode']);
+    Route::apiResource('job-work-rate-master-process',JobWorkRateMasterProcessController::class);
+    Route::get('get-job-work-rate-process/{id}', [JobWorkRateMasterProcessController::class, 'getJobWorkRateProcessDetail']);
+    Route::apiResource('job-work-rate-terms-condition',JobWorkRateTermsConditionController::class);
+    Route::get('get-job-work-rate-terms-condition/{id}', [JobWorkRateTermsConditionController::class, 'getJobWorkRateMasterTermCondition']);
+    Route::apiResource('sub-contractor-rate-parameter',SubContractorRateParameterController::class);
+    Route::apiResource('show-issue-items-process',ShowIssueItemsController::class);
+    Route::get('get-show-issue-item/{id}',[ShowIssueItemsController::class, 'getShowIssueItem']);
+    Route::post('get-issue-items-process', [ShowIssueItemsController::class, 'getShowProcessItems']);
+    Route::post('issue-quantity-for-job-card', [ShowIssueItemsController::class,'issueQuantityForJobCard']);
+
+    Route::apiResource('job-card-process-inside',JobCardProcessInSideController::class);
+    Route::get('get-process-inside/{id}', [JobCardProcessInSideController::class, 'getProcessInside']);
+    Route::apiResource('job-card-process-outside',JobCardProcessOutSideController::class);
+    Route::get('get-process-outside/{id}', [JobCardProcessOutSideController::class, 'getProcessOutSide']);
+    //MachineMaster Option
+    Route::get('get-machine-master-option', [MachineController::class, 'getMachineOptions']);
+    //master
+    Route::post('check-term-condition-code-exist', [TermsConditionGroupController::class, 'checkTermConditionCodeExist']);
+    Route::apiResource('terms-condi-template-item-master',TermsConditionTemplateItemMasterController::class);
+    Route::get('term-condition-template-wise/{id}',[TermsConditionTemplateItemMasterController::class,'getTemplateWiseItems']);
+    Route::get('get-process-sheet-list-option', [ProcessSheetListController::class,'getProcessSheetListOption']);
+    //job card prodess dropdown
+    Route::get('get-process-sheet-list-process-option', [ProcessSheetListController::class,'getProcessSheetListOptions']);
+
+    //operator Master
+    Route::get('get-operator-master-option', [OperatorController::class, 'getOperatorMasterOptions']);
+    //general Master
+    Route::post('country-master-exist', [CountryMasterController::class, 'checkCountryMasterExist']);
+    Route::post('state-master-exist', [StateMasterController::class, 'checkStateMasterExist']);
+    Route::post('city-master-exist', [CityMasterController::class, 'checkCityMasterExist']);
+    Route::post('currency-master-exist', [CurrencyController::class, 'checkCurrencyMasterExist']);
+    Route::post('department-master-exist', [DepartmentController::class, 'checkDepartmentMasterExist']);
+    Route::post('designation-master-exist', [DesignationController::class, 'checkDesignationMasterExist']);
+    Route::post('enquiry-reference-master-exist',[EnquiryReferenceController::class, 'checkEnquiryReferenceMasterExist']);
+    Route::post('quotation-master-exist',[QuotationTypeController::class, 'checkQuotationMasterExist']);
+    Route::post('lead-title-master-exist',[LeadTitleMasterController::class, 'checkLeadTitleMasterExist']);
+    Route::post('industrial-type-master-exist',[IndustryTypeController::class, 'checkIndustrialTypeMasterExist']);
+    Route::post('purchase-type-master-exist',[PurchaseTypeController::class, 'checkPurchaseTypeMasterExist']);
+    Route::post('bank-master-exist',[BankController::class, 'checkBankMasterExist']);
+    Route::post('document-header-master-exist',[DocumentHeaderController::class, 'checkDocumentHeaderMasterExist']);
+    Route::post('document-footer-master-exist',[DocumentFooterController::class, 'checkDocumentFooterMasterExist']);
+    Route::post('note-master-exist',[NoteController::class, 'checkNoteMasterExist']);
+    Route::post('machine-master-exist',[MachineController::class, 'checkMachineMasterExist']);
+    Route::post('process-master-exist',[ProcessController::class, 'checkProcessMasterExist']);
+    Route::post('operator-master-exist',[OperatorController::class, 'checkOperatorMasterExist']);
+    Route::post('packing-master-exist',[PackingController::class, 'checkPackingMasterExist']);
+    Route::post('payment-deduction-master-exist',[PaymentDeductionController::class, 'checkPaymentDeductionMasterExist']);
+    Route::post('expence-master-exist',[ExpenseController::class, 'checkExpenceMasterExist']);
+    Route::post('document-type-master-exist',[DocumentTypeController::class, 'checkDocumentTypeMasterExist']);
+    Route::post('branch-master-exist',[BranchMasterController::class, 'checkBranchMasterExist']);
+    Route::post('store-master-exist',[StoreMasterController::class, 'checkStoreMasterExist']);
+    Route::post('default-terms-condition-master-exist',[DefaultTermsConditionController::class, 'checkDefaultTemsConditionMasterExist']);
+    //issue Challan
+    Route::post('get-show-issue-item-filter',[ShowIssueItemsController::class,'getShowIssueItemsFilter']);
+    Route::get('get-jobWork-challan-item-options', [IssueJobWorkChallanItemsController::class, 'getJobWorkChallanItemOptions']);
+    //purchase Return
+    Route::apiResource('purchase-return',PurchaseReturnController::class);
+    Route::apiResource('purchase-return-item',PurchaseReturnItemController::class);
+    Route::get('get-purchase-return-items/{id}', [PurchaseReturnItemController::class,'getPurchaseReturnItems']);
+    Route::apiResource('purchase-return-billing',PurchaseReturnBillingController::class);
+    Route::get('get-purchase-return-billing-term/{id}', [PurchaseReturnBillingController::class,'getPurchaseReturnBillingTerm']);
+    Route::delete('delete-purchase-return-billing-term/{id}', [PurchaseReturnBillingController::class,'deletePurchaseReturnBillingTerm']);
+    Route::apiResource('purchase-return-terms', PurchaseReturnTermConditionController::class);
+    Route::get('purchase-return-term-condition/{id}',[PurchaseReturnTermConditionController::class,'getPurchaseReturnTermCondition']);
+    Route::apiResource('gate-inward-receipt',GateInwardReceiptController::class);
+    Route::get('get-gir-party-wise/{partyId}',[GateInwardReceiptController::class, 'getGirPartyWise']);
+    Route::get('get-purchase-order-vendor-options', [PurchaseOrderController::class, 'getVendorDetailOptions']);
+    Route::apiResource('goods-receipt-note',GoodsReceiptNoteController::class);
+    Route::apiResource('goods-receipt-note-item',GoodsReceiptNoteItemController::class);
+    Route::get('get-good-receipt-note-item-options',[GoodsReceiptNoteController::class,'getGoodItemOption']);
+    Route::get('get-grn-item-options',[GoodsReceiptNoteController::class,'geGrnItemOption']);
+    Route::get('goods-receipt-note-items/{id}',[GoodsReceiptNoteItemController::class,'getGoodNoteItem']);
+    Route::get('get-pending-po-vendor-options', [PurchaseOrderController::class, 'getVendorDetailsOptions']);
+    Route::get('get-pending-purchase-orders', [PurchaseOrderController::class, 'getPendingOrderItem']);
+    Route::get('get-purchase-order-item-list/{purchaseOrderId}', [PurchaseOrderItemController::class, 'getPurchaseOrderItemList']);
+    Route::post('get-Indent-Approval-item-filter',[IndentApprovalController::class, 'getIndentApprovalItemFilter']);
+    Route::post('get-sales-orders-item-filters',[SalesOrderItemsController::class, 'getSalesOrderFilters']);
+    Route::Post('get-purchase-quotation-item-filters',[PurchaseQuotationItemsController::class, 'getPurchaseQuotationFilters']);
+    Route::apiResource('purchase-order-show-amd-detail',PurchaseOrderShowAmdDetailController::class);
+    Route::get('get-purchase-order-shosw-amd-list/{id}', [PurchaseOrderShowAmdDetailController::class, 'getPurchaseOrderShowAmdDetails']);
+   //pq vendor Qtn No
+    Route::get('get-purchase-quotation-number',[PurchaseQuotationController::class, 'getQuotationNumber']);
+    Route::get('get-purchase-quotation-reference-number',[PurchaseQuotationController::class,'getPqRefernceNumber']);
+    Route::get('get-party-po-options', [PartyMasterController::class, 'getPoPartyTypeOptions']);
+
+    Route::apiResource('transaction-inventory',TransactionController::class);
+
+    Route::post('get-work-order-item-filter',[WorkOrderController::class, 'getWrkOrderFilter']);
+    Route::post('get-bom-item-filter',[BillOfMaterialController::class,'getBomItemFilters']);
+    Route::post('add-copy-bom-item',[BomVersionItemController::class, 'addBomVersionItem']);
+//    master Default terms and Condition
+    Route::apiResource('default-term-condition-item',DefaultTermsConditionItemController::class);
+    Route::post('add-party-master-term-condition-from-template',[TermAndConditionController::class,'addTermConditionFromTemplateData']);
+
+    Route::apiResource('inward-quality-control',InwardQualityControlController::class);
+    Route::get('get-item-master-filter-options', [ItemMasterController::class, 'getItemFilterOptions']);
+    Route::apiResource('inward-quality-control-item',InwardQualityControlItemController::class);
+    Route::get('inward-quality-control-items/{id}',[InwardQualityControlItemController::class,'getInwardQualityControlItem']);
+    Route::post('get-grn-item-list', [GoodsReceiptNoteItemController::class, 'getGrnItemList']);
+    Route::apiResource('finished-good-quality-control',FinishedGoodQualityControlController::class);
+    Route::apiResource('work-order-sub-assembly-qc',WorkOrderSubAssemblyQcController::class);
+    Route::apiResource('job-card-process-inside-qc',JobCardProcessInsideQcController::class);
+    Route::apiResource('job-work-outside-qc',JobWorkOutsideQcController::class);
+    Route::get('get-job-card-item-options', [JobCardsController::class, 'getJobCardItemOptions']);
+    Route::post('get-receipt-job-work-item-filter',[ReceiptJobWorkChallanController::class,'getReceiptJobWorkItemFilter']);
+    Route::get('get-receipt-job-work-item-option',[ReceiptJobWorkChallanController::class, 'getReceiptJobWorkItemOption']);
+    Route::post('add-purchase-order-term-condition-from-template',[PurchaseOrderTermConditionController::class,'addPoTermConditionFromTemplateData']);
+    Route::post('copy-term-condition-default-template-purchase-order', [PurchaseOrderTermConditionController::class, 'copyPoDefaultTermAndCondition']);
+    Route::post('copy-term-condition-party-master-purchase-order', [PurchaseOrderTermConditionController::class, 'getPoTermConditionFromPartyMaster']);
+    Route::get('get-Work-Order-item-options', [WorkOrderItemController::class, 'getWorkOrderItemOptions']);
+    Route::get('get-Work-Order-assembly-item-options', [WorkOrderItemController::class, 'getWorkOrderAssemblyItemOptions']);
+    Route::get('get-work-order-item-option',[WorkOrderItemController::class,'getWorkOrderItemOption']);
+    Route::post('job-card-process-sheet-item-code-exist',[ProcessSheetMasterController::class, 'checkProcessSheetItemCodeExist']);
+    Route::get('get-reference-number-by-party/{poVendorId}',[PurchaseQuotationController::class,'getReferenceNoByParty']);
+    Route::apiResource('purchase-order-po-history',PurchaseOrderPoHistoryController::class);
+    Route::get('get-po-history/{id}',[PurchaseOrderPoHistoryController::class, 'getPoHistoryDetails']);
+    Route::get('document-sales-enquiry-header-options', [DocumentHeaderController::class, 'getSalesEnquiryHeadersOptions']);
+    Route::get('document-sales-order-header-options', [DocumentHeaderController::class, 'getSalesOrderHeadersOptions']);
+    Route::get('document-sales-enquiry-footer-options', [DocumentFooterController::class, 'getSalesEnquiryFootersOptions']);
+    Route::get('document-sales-order-footer-options', [DocumentFooterController::class, 'getSalesOrderFootersOptions']);
+    Route::post('add-purchase-quotation-term-condition-from-template',[PurchaseQuotationTermConditionController::class,'addPqTermConditionFromTemplateData']);
+    Route::post('copy-term-condition-default-template-purchase-quotation', [PurchaseQuotationTermConditionController::class, 'copyPqDefaultTermAndCondition']);
+    Route::post('copy-term-condition-party-master-purchase-quotation', [PurchaseQuotationTermConditionController::class, 'getPqTermConditionFromPartyMaster']);
+    Route::get('get-po-terms-condition-list-qc/{purchaseOrderId}', [PurchaseOrderTermConditionController::class, 'getTermsAndConditionListQc']);
+    Route::get('get-approved-sales-enquiry-item-list', [SalesEnquiryController::class, 'getSalesEnquiryItemList']);
+    Route::get('get-grn-number-options',[GoodsReceiptNoteItemController::class,'geGrnNumberOption']);
+    Route::get('get-grn-number-item-wise-options',[GoodsReceiptNoteItemController::class,'getGenNumberFromGrnItemOptions']);
+    Route::get('get-all-grn-item-options',[GoodsReceiptNoteItemController::class,'getAllGrnItemOptions']);
+    Route::get('get-grn-po-number-options',[GoodsReceiptNoteItemController::class,'geGrnPoNumberOption']);
+    Route::get('get-all-grn-po-number-options',[GoodsReceiptNoteItemController::class,'getAllGrnPoNumberOption']);
+
+    /* HR Master*/
+    Route::apiResource('grade-master', GradeMasterController::class);
+    Route::apiResource('hr-branch-master', HrBranchMasterController::class);
+    Route::apiResource('hr-department-master', HrDepartmentMasterController::class);
+    Route::apiResource('division-master', DivisionMasterController::class);
+    Route::apiResource('unit-master', UnitMasterController::class);
+    Route::apiResource('category-master', CategoryMasterController::class);
+    Route::apiResource('group-master', GroupMasterController::class);
+    Route::apiResource('hr-designation-master', HrDesignationMasterController::class);
+    Route::get('get-grade-master', [GradeMasterController::class, 'getGradeMasterOption']);
+    Route::get('get-hr-branch-master', [HrBranchMasterController::class, 'getHrBranchMaster']);
+    Route::get('get-hr-department-master', [HrDepartmentMasterController::class, 'getHrDepartmentMaster']);
+    Route::get('get-division-master', [DivisionMasterController::class, 'getDivisionMaster']);
+    Route::get('get-unit-master', [UnitMasterController::class, 'getUnitMaster']);
+    Route::get('get-category-master', [CategoryMasterController::class, 'getCategoryMaster']);
+    Route::get('get-group-master', [GroupMasterController::class, 'getGroupMaster']);
+    Route::get('get-hr-designation-master', [HrDesignationMasterController::class, 'getHrDesignationMaster']);
+
+    Route::apiResource('leave-notes',LeaveNotesController::class);
+});

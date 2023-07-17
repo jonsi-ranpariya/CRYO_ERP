@@ -1,0 +1,111 @@
+/*================================================================================
+
+NOTE:
+------
+PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
+WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.
+
+change color in variables.scss and change it every where in the theme
+
+FileName: resources/js/src/@core/scss/base/bootstrap-extended/_variables.scss
+VariableName: $cyan = #0077B1 //Brand Color Code
+*/
+
+.table_scroll {
+    height: auto;
+    max-height: 350px;
+    overflow-y: scroll;
+}
+
+[dir] .form-control {
+    padding: 0.438rem 1rem;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #d8d6de;
+    border-radius: 0.357rem;
+    font-weight: bold;
+    color: #000;
+}
+
+label {
+    color: #000;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.nav-pills .nav-link {
+    font-size: 1rem;
+    line-height: 1rem;
+    color: #000000;
+    font-weight: bold;
+}
+
+.vs__selected {
+    color: #000;
+    font-weight: bold;
+}
+
+.vs__dropdown-option {
+    color: #000;
+    font-weight: bold;
+}
+.nav-item {
+    color: #000;
+    font-weight: bold;
+}
+
+h5 {
+    font-weight: bold;
+}
+
+.table td {
+    font-weight: bold;
+}
+
+span {
+    font-weight: bold;
+}
+
+/*Scroll Bar Area*/
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+    border-radius: 2.5px;
+    background-color: #eee;//Dark Background Color -> #3b4253
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #b4b7bd;
+    border-radius: 6px;
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #76767b;
+}
+
+/*Tool tip Font changes*/
+
+[dir] .tooltip-inner {
+    font-weight: bold;
+}
+
+.main-menu.menu-light .navigation > li ul li > a:hover {
+    border-radius: 10px;
+}
+
+[dir] li.navigation-header.text-truncate {
+    text-align: center;
+    padding: 10px !important;
+    margin: 10px !important;
+    color: #000 !important;
+    font-weight: 900 !important;
+    font-size: 14px !important;
+}
+
+[dir] li.navigation-header.text-truncate span {
+    padding: 10px !important;
+    margin: 10px !important;
+}
